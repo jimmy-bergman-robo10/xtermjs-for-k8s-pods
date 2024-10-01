@@ -10,6 +10,7 @@ const podAttachButton = document.getElementById("pod-attach");
 const terminalComponent = document.getElementById("terminal");
 
 const HOST = window.location.host;
+const PROTOCOL = window.location.protocol === 'https:' ? 'wss' : 'ws';
 
 let socket = null;
 
@@ -25,7 +26,7 @@ const podExec = (pod, kubeconfig, namespace) => {
     return;
   }
 
-  const wsUrl = `ws://${HOST}/ws?pod=${pod}&kubeconfig=${kubeconfig}&namespace=${namespace || ''}`;
+  const wsUrl = `${PROTOCOL}://${HOST}/ws?pod=${pod}&kubeconfig=${kubeconfig}&namespace=${namespace || ''}`;
   socket = new WebSocket(wsUrl);
 
   socket.addEventListener("open", () => {
