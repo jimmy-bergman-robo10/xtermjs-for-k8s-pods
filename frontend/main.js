@@ -4,6 +4,8 @@ const { FitAddon } = require("xterm-addon-fit");
 const copyToClipboard = require("copy-to-clipboard");
 
 const podNameInput = document.getElementById("pod-name");
+const namespaceInput = document.getElementById("namespace");
+const kubeconfigInput = document.getElementById("kubeconfig");
 const podAttachButton = document.getElementById("pod-attach");
 const terminalComponent = document.getElementById("terminal");
 
@@ -11,19 +13,19 @@ const HOST = window.location.host;
 
 let socket = null;
 
-const podExec = (pod) => {
+const podExec = (pod, kubeconfig, namespace) => {
   // If active socket is being used, close connection and remove terminal view
   if (socket !== null) {
     terminalComponent.innerHTML = "";
     socket.close();
     socket = null;
     setTimeout(() => {
-      podExec(pod);
+      podExec(pod, kubeconfig, namespace);
     }, 1000);
     return;
   }
 
-  const wsUrl = `ws://${HOST}/ws?pod=${pod}`;
+  const wsUrl = `ws://${HOST}/ws?pod=${pod}&kubeconfig=${kubeconfig}&namespace=${namespace || ''}`;
   socket = new WebSocket(wsUrl);
 
   socket.addEventListener("open", () => {
@@ -62,8 +64,8 @@ const podExec = (pod) => {
 };
 
 podAttachButton.addEventListener("click", () => {
-  if (podNameInput.value.length) {
+  if (podNameInput.value.length && kubeconfigInput.value.length) {
     console.log(podNameInput.value);
-    podExec(podNameInput.value);
+    podExec(podNameInput.value, btoa(kubeconfigInput.value), namespaceInput.value);
   }
 });

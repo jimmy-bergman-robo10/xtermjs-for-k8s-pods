@@ -8,8 +8,8 @@ const wssServer = new WebSocket.Server({
 
 exports.setupSocket = (server) => {
   server.on("upgrade", (request, socket, head) => {
-    let { pod } = url.parse(request.url, true).query;
-    podSocket = connect(pod);
+    let { pod, kubeconfig, namespace } = url.parse(request.url, true).query;
+    podSocket = connect(pod, Buffer.from(kubeconfig, 'base64').toString(), namespace);
     wssServer.handleUpgrade(request, socket, head, (ws) => {
       wssServer.emit("connection", ws, podSocket);
     });

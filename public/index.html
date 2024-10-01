@@ -31,12 +31,27 @@
               <div class="input-group mb-3">
                 <input
                   type="text"
+                  id="namespace"
+                  class="form-control"
+                  placeholder="K8s Namespace"
+                  aria-label="K8s Namespace"
+                  aria-describedby="namespace"
+                />
+                <input
+                  type="text"
                   id="pod-name"
                   class="form-control"
                   placeholder="K8s Pod Name"
                   aria-label="K8s Pod Name"
                   aria-describedby="pod-attach"
                 />
+                <textarea
+                  id="kubeconfig"
+                  class="form-control"
+                  placeholder="Kubeconfig"
+                  aria-label="Kubeconfig"
+                  aria-describedby="kubeconfig"
+                /></textarea>
                 <div class="input-group-append">
                   <button
                     class="btn btn-outline-primary"
